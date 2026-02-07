@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  const [files, setFiles] = useState([]);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    fetch('http://localhost:8080/list')
+      .then(response => {
+        if(!response.ok) {
+          throw new Error('Failed to recieve response from backend')
+        }
+        return response.json();
+      })
+      .then(data => setFiles(data))
+      .catch(err => {
+        console.error("error: ", err);
+        setError(err.message);
+      });
+  
+}, []);
+
+  return (
+        <div style={{ padding: '20px' }}>
+            <h2>Folder Files</h2>
+            {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+            <ul>
+                {files.map((fileName, index) => (
+                    <div key={index}>{fileName}</div>
+                ))}
+            </ul>
+        </div>
+    );
+
+}
 export default App;
