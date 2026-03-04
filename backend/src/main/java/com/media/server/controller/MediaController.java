@@ -1,4 +1,4 @@
-package com.media.server;
+package com.media.server.controller;
 import java.io.File;
 import java.io.IOException;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 
@@ -29,14 +30,25 @@ public class MediaController {
     public String index() {
         return "index.html";
     }
-    @GetMapping(value = "/video", produces = "video/mp4")
-    public Resource streamVideo() {
-        File videoFile = new File("");
-        return new FileSystemResource(videoFile);
+    @GetMapping(value = "/video")
+    public ResponseEntity streamVideo(@RequestParam String fileName) {
+        Path path = Paths.get(folderPath).resolve(fileName);
+        File videoFile = path.toFile();
+
+        if(!videoFile.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource resource = new FileSystemResource(videoFile);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("video/mp4"))
+                .body(resource);
     }
+
     @GetMapping(value = "/list")
     public ResponseEntity<List<String>> getFiles() {
-        System.out.println("asdf: "+folderPath);
+        System.out.println("       host: "+folderPath);
         File folder = new File(folderPath);
         File[] listOfFiles = folder.listFiles();
         List<String> fileNames = new ArrayList<>();
