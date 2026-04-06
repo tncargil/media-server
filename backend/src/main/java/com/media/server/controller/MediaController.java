@@ -8,14 +8,17 @@ import java.util.List;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.core.io.UrlResource;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @RestController
 public class MediaController {
@@ -73,5 +76,24 @@ public class MediaController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        if(file.isEmpty()) {
+            System.out.println("file empty");
+            return ResponseEntity.badRequest().body("Please select a file");
+        }
+
+        try {
+            Path copyLocation = Paths.get(folderPath).resolve(file.getOriginalFilename());
+            Files.createDirectories(copyLocation.getParent());
+
+            Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("successful upload" + copyLocation.toString());
+            return ResponseEntity.ok("File upload successful");
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("error uploading: " + e.getMessage());
+        }
     }
 }
