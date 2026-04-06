@@ -43,18 +43,48 @@ function App() {
         </div>
     );
 
-    const UploadPage = () => (
-        <div style={{ position: "sticky", top: 0, padding: "20px" }}>
-            <button onClick={() => setView("home")}>← Back</button>
-            <h2>Upload Video</h2>
-            <input type="file" accept="video/mp4" />
-            <button
-                onClick={() => alert("Logic for Springfield upload goes here!")}
-            >
-                Upload
-            </button>
-        </div>
-    );
+    const UploadPage = () => {
+        const [file, setFile] = useState(null);
+
+        const handleUploadClick = async () => {
+            if (!file) {
+                alert("please select a file");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch(`${URL}/upload`, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert("successful upload");
+                } else {
+                    alert("upload failed :'(");
+                }
+            } catch (error) {
+                console.error("Error: ", error);
+                alert("error on upload");
+            }
+        };
+
+        return (
+            <div style={{ position: "sticky", top: 0, padding: "20px" }}>
+                <button onClick={() => setView("home")}>← Back</button>
+                <h2>Upload Video</h2>
+                <input
+                    type="file"
+                    accept="video/mp4"
+                    onChange={(e) => setFile(e.target.files[0])}
+                />
+                <button onClick={handleUploadClick}>Upload</button>
+            </div>
+        );
+    };
 
     const PlayerPage = () => (
         <div
