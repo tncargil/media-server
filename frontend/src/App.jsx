@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
+import { LandingPage } from "./components/LandingPage";
+import { PlayerPage } from "./components/PlayerPage";
+import { DownloadPage } from "./components/DownloadPage";
+import { UploadPage } from "./components/UploadPage";
 
 function App() {
-    // Navigation state: 'home', 'upload', or 'player'
     const [view, setView] = useState("home");
     const [files, setFiles] = useState([]);
     const [error, setError] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const URL = import.meta.env.VITE_API_BASE_URL;
-    // Fetch files (Moved to a function so we can refresh after upload)
+
     const fetchFiles = () => {
         fetch(`${URL}/list`)
             .then((res) =>
@@ -21,163 +24,6 @@ function App() {
         fetchFiles();
     }, []);
 
-    // --- SUB-COMPONENTS FOR DIFFERENT VIEWS ---
-
-    const LandingPage = () => (
-        <div>
-            <h1>Media Manager</h1>
-            <div
-                style={{
-                    display: "flex",
-                    gap: "20px",
-                    alignItems: "center", // Center horizontally
-                    justifyContent: "center",
-                    textAlign: "center",
-                }}
-            >
-                <button onClick={() => setView("upload")} style={buttonStyle}>
-                    Upload
-                </button>
-                <button onClick={() => setView("download")} style={buttonStyle}>
-                    Download
-                </button>
-                <button onClick={() => setView("player")} style={buttonStyle}>
-                    Watch Videos
-                </button>
-            </div>
-        </div>
-    );
-
-    const DownloadPage = () => (
-        <div style={{ textAlign: "center", marginTop: "100px" }}>
-            <h1> hello world </h1>
-        </div>
-    );
-
-    const UploadPage = () => {
-        const [file, setFile] = useState(null);
-
-        const handleUploadClick = async () => {
-            if (!file) {
-                alert("please select a file");
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append("file", file);
-
-            try {
-                const response = await fetch(`${URL}/upload`, {
-                    method: "POST",
-                    body: formData,
-                });
-
-                if (response.ok) {
-                    alert("successful upload");
-                } else {
-                    alert("upload failed :'(");
-                }
-            } catch (error) {
-                console.error("Error: ", error);
-                alert("error on upload");
-            }
-        };
-
-        return (
-            <div style={{ position: "sticky", top: 0, padding: "20px" }}>
-                <button onClick={() => setView("home")}>← Back</button>
-                <h2>Upload Video</h2>
-                <input
-                    type="file"
-                    accept="video/mp4"
-                    onChange={(e) => setFile(e.target.files[0])}
-                />
-                <button onClick={handleUploadClick}>Upload</button>
-            </div>
-        );
-    };
-
-    const PlayerPage = () => (
-        <div
-            style={{
-                padding: "10px",
-                maxwidth: "800px",
-                margin: "0 auto",
-                position: "fixed",
-                top: "0",
-            }}
-        >
-            <button
-                onClick={() => setView("home")}
-                style={{ marginbottom: "15px" }}
-            >
-                ← home
-            </button>
-
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "20px",
-                }}
-            >
-                <div
-                    style={{
-                        width: "100%",
-                        backgroundColor: "#000",
-                        borderRadius: "8px",
-                        overflow: "hidden",
-                    }}
-                >
-                    {selectedFile ? (
-                        <video
-                            key={selectedFile}
-                            controls
-                            width="100%"
-                            autoPlay
-                            playsInline
-                            style={{ display: "block" }}
-                        >
-                            <source
-                                src={`${URL}/video?fileName=${encodeURIComponent(selectedFile)}`}
-                                type="video/mp4"
-                            />
-                        </video>
-                    ) : (
-                        <div
-                            style={{
-                                color: "white",
-                                padding: "60px",
-                                textAlign: "center",
-                            }}
-                        >
-                            <p>Select a video to start watching</p>
-                        </div>
-                    )}
-                </div>
-
-                {/* 2. Folder Files now below */}
-                <div style={{ width: "100%" }}>
-                    <h2 style={{ fontSize: "1.2rem", marginBottom: "10px" }}>
-                        Folder Files
-                    </h2>
-                    <ul style={{ listStyle: "none", padding: 0 }}>
-                        {files.map((f, i) => (
-                            <li
-                                key={i}
-                                onClick={() => setSelectedFile(f)}
-                                style={listStyle(selectedFile === f)}
-                            >
-                                {f}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    );
-
-    // --- MAIN RENDER LOGIC ---
     return (
         <div
             style={{
@@ -191,15 +37,22 @@ function App() {
                 padding: 0,
             }}
         >
-            {view === "home" && <LandingPage />}
-            {view === "upload" && <UploadPage />}
-            {view === "player" && <PlayerPage />}
+            {view === "home" && <LandingPage setView={setView} />}
+            {view === "upload" && <UploadPage setView={setView} />}
+            {view === "player" && (
+                <PlayerPage
+                    setView={setView}
+                    selectedFile={selectedFile}
+                    setSelectedFile={setSelectedFile}
+                    files={files}
+                    URL={URL}
+                />
+            )}
             {view === "download" && <DownloadPage />}
         </div>
     );
 }
 
-// Simple Styles
 const buttonStyle = {
     padding: "15px 30px",
     fontSize: "18px",
