@@ -24,22 +24,33 @@ function App() {
     // --- SUB-COMPONENTS FOR DIFFERENT VIEWS ---
 
     const LandingPage = () => (
-        <div style={{ textAlign: "center", marginTop: "100px" }}>
+        <div>
             <h1>Media Manager</h1>
             <div
                 style={{
                     display: "flex",
                     gap: "20px",
+                    alignItems: "center", // Center horizontally
                     justifyContent: "center",
+                    textAlign: "center",
                 }}
             >
                 <button onClick={() => setView("upload")} style={buttonStyle}>
-                    Upload New Video
+                    Upload
+                </button>
+                <button onClick={() => setView("download")} style={buttonStyle}>
+                    Download
                 </button>
                 <button onClick={() => setView("player")} style={buttonStyle}>
                     Watch Videos
                 </button>
             </div>
+        </div>
+    );
+
+    const DownloadPage = () => (
+        <div style={{ textAlign: "center", marginTop: "100px" }}>
+            <h1> hello world </h1>
         </div>
     );
 
@@ -168,10 +179,22 @@ function App() {
 
     // --- MAIN RENDER LOGIC ---
     return (
-        <div>
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                width: "100vw",
+                margin: 0,
+                padding: 0,
+            }}
+        >
             {view === "home" && <LandingPage />}
             {view === "upload" && <UploadPage />}
             {view === "player" && <PlayerPage />}
+            {view === "download" && <DownloadPage />}
         </div>
     );
 }
