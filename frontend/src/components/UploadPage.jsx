@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const UploadPage = ({ setView }) => {
+export const UploadPage = ({ setView, URL }) => {
     const [file, setFile] = useState(null);
 
     const handleUploadClick = async () => {

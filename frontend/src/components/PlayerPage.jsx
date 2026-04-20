@@ -5,15 +5,7 @@ export const PlayerPage = ({
     setSelectedFile,
     URL,
 }) => (
-    <div
-        style={{
-            padding: "10px",
-            maxwidth: "800px",
-            margin: "0 auto",
-            position: "fixed",
-            top: "0",
-        }}
-    >
+    <div>
         <button
             onClick={() => setView("home")}
             style={{ marginbottom: "15px" }}
@@ -21,13 +13,7 @@ export const PlayerPage = ({
             ← home
         </button>
 
-        <div
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-            }}
-        >
+        <div>
             <div
                 style={{
                     width: "100%",

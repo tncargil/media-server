@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "./App.css";
 import { LandingPage } from "./components/LandingPage";
 import { PlayerPage } from "./components/PlayerPage";
 import { DownloadPage } from "./components/DownloadPage";
@@ -7,7 +8,6 @@ import { UploadPage } from "./components/UploadPage";
 function App() {
     const [view, setView] = useState("home");
     const [files, setFiles] = useState([]);
-    const [error, setError] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -25,20 +25,9 @@ function App() {
     }, []);
 
     return (
-        <div
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                width: "100vw",
-                margin: 0,
-                padding: 0,
-            }}
-        >
+        <div className="app-container">
             {view === "home" && <LandingPage setView={setView} />}
-            {view === "upload" && <UploadPage setView={setView} />}
+            {view === "upload" && <UploadPage setView={setView} URL={URL} />}
             {view === "player" && (
                 <PlayerPage
                     setView={setView}
@@ -52,20 +41,5 @@ function App() {
         </div>
     );
 }
-
-const buttonStyle = {
-    padding: "15px 30px",
-    fontSize: "18px",
-    cursor: "pointer",
-    borderRadius: "8px",
-};
-const listStyle = (isActive) => ({
-    cursor: "pointer",
-    padding: "10px",
-    margin: "5px 0",
-    background: isActive ? "#e0e0e0" : "#f4f4f4",
-    borderRadius: "4px",
-    border: "1px solid #ddd",
-});
 
 export default App;
