@@ -68,8 +68,8 @@ public class MediaController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     
-    @GetMapping("/download/{filename}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) throws IOException {
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadFile(@RequestParam String fileName) throws IOException {
         Path path = Paths.get(folderPath).resolve(fileName);
         Resource resource = new UrlResource(path.toUri());
 
