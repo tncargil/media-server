@@ -37,7 +37,9 @@ function App() {
                     URL={URL}
                 />
             )}
-            {view === "download" && <DownloadPage />}
+            {view === "download" && (
+                <DownloadPage setView={setView} files={files} URL={URL} />
+            )}
         </div>
     );
 }
