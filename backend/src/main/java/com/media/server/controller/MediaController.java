@@ -26,10 +26,6 @@ public class MediaController {
     @Value("${spring.folder}")
     String folderPath;
 
-    @GetMapping("/")
-    public String index() {
-        return "index.html";
-    }
     @GetMapping(value = "/video")
     public ResponseEntity<Resource> streamVideo(@RequestParam String fileName) {
         Path path = Paths.get(folderPath).resolve(fileName);
@@ -73,7 +69,13 @@ public class MediaController {
         Path path = Paths.get(folderPath).resolve(fileName);
         Resource resource = new UrlResource(path.toUri());
 
+        String contentType = Files.probeContentType(path);
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
         return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
