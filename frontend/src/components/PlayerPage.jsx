@@ -6,10 +6,7 @@ export const PlayerPage = ({
     URL,
 }) => (
     <div>
-        <button
-            onClick={() => setView("home")}
-            style={{ marginbottom: "15px" }}
-        >
+        <button className="home-button" onClick={() => setView("home")}>
             ← home
         </button>
 
@@ -54,15 +51,19 @@ export const PlayerPage = ({
                     Folder Files
                 </h2>
                 <ul style={{ listStyle: "none", padding: 0 }}>
-                    {files.map((f, i) => (
-                        <li
-                            key={i}
-                            onClick={() => setSelectedFile(f)}
-                            style={listStyle(selectedFile === f)}
-                        >
-                            {f}
-                        </li>
-                    ))}
+                    {files
+                        .filter((file) =>
+                            /\.(mp4|mov|webm|ogv|mkv)$/i.test(file),
+                        )
+                        .map((f, i) => (
+                            <li
+                                key={i}
+                                onClick={() => setSelectedFile(f)}
+                                style={listStyle(selectedFile === f)}
+                            >
+                                {f}
+                            </li>
+                        ))}
                 </ul>
             </div>
         </div>

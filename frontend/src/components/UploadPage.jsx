@@ -31,7 +31,9 @@ export const UploadPage = ({ setView, URL }) => {
 
     return (
         <div style={{ position: "sticky", top: 0, padding: "20px" }}>
-            <button onClick={() => setView("home")}>← Back</button>
+            <button className="home-button" onClick={() => setView("home")}>
+                ← home
+            </button>
             <h2>Upload Video</h2>
             <input
                 type="file"

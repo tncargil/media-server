@@ -43,11 +43,8 @@ export const DownloadPage = ({ setView, files, URL }) => {
 
     return (
         <div>
-            <button
-                onClick={() => setView("home")}
-                style={{ marginbottom: "15px" }}
-            >
-                ← back
+            <button className="home-button" onClick={() => setView("home")}>
+                ← home
             </button>
 
             <div style={{ width: "100%" }}>
