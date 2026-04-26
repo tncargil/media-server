@@ -26,6 +26,18 @@ body {
 
 .home-button {
     position: fixed;
-    left: 0;
-    top: 0;
+    left: 10px;
+    top: 10px;
+}
+
+.search-bar {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    width: 200px;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    z-index: 100;
+    border: 2px solid #444;
+    text-align: center;
 }

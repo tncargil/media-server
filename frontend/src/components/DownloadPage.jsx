@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FileSearch } from "../hooks/FileFilter";
 
 export const DownloadPage = ({ setView, files, URL }) => {
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
+    const { searchTerm, setSearchTerm, filteredFiles } = FileSearch(files);
 
     const handleUploadClick = async (file) => {
         if (!file) {
@@ -46,15 +48,19 @@ export const DownloadPage = ({ setView, files, URL }) => {
     return (
         <div>
             <button className="home-button" onClick={() => navigate("/")}>
-                ← home
+                ←
             </button>
 
-            <div style={{ width: "100%" }}>
-                <h2 style={{ fontSize: "1.2rem", marginBottom: "10px" }}>
-                    Folder Files
-                </h2>
+            <div>
+                <input
+                    className="search-bar"
+                    type="text"
+                    placeholder="Search files..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
                 <ul style={{ listStyle: "none", padding: 0 }}>
-                    {files.map((f, i) => (
+                    {filteredFiles.map((f, i) => (
                         <li
                             key={i}
                             onClick={() => handleUploadClick(f)}
