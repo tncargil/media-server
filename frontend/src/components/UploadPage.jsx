@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const UploadPage = ({ setView, URL }) => {
+    const navigate = useNavigate();
     const [file, setFile] = useState(null);
 
     const handleUploadClick = async () => {
@@ -31,15 +33,11 @@ export const UploadPage = ({ setView, URL }) => {
 
     return (
         <div style={{ position: "sticky", top: 0, padding: "20px" }}>
-            <button className="home-button" onClick={() => setView("home")}>
+            <button className="home-button" onClick={() => navigate("/")}>
                 ← home
             </button>
-            <h2>Upload Video</h2>
-            <input
-                type="file"
-                accept="video/mp4"
-                onChange={(e) => setFile(e.target.files[0])}
-            />
+            <h2>Upload File</h2>
+            <input type="file" onChange={(e) => setFile(e.target.files[0])} />
             <button onClick={handleUploadClick}>Upload</button>
         </div>
     );

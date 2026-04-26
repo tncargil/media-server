@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const DownloadPage = ({ setView, files, URL }) => {
+    const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
 
     const handleUploadClick = async (file) => {
@@ -43,7 +45,7 @@ export const DownloadPage = ({ setView, files, URL }) => {
 
     return (
         <div>
-            <button className="home-button" onClick={() => setView("home")}>
+            <button className="home-button" onClick={() => navigate("/")}>
                 ← home
             </button>
 
@@ -71,7 +73,7 @@ const listStyle = (isActive) => ({
     cursor: "pointer",
     padding: "10px",
     margin: "5px 0",
-    background: isActive ? "#e0e0e0" : "#f4f4f4",
+    background: isActive ? "#C0CADF" : "#232333",
     borderRadius: "4px",
     border: "1px solid #ddd",
 });

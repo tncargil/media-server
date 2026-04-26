@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { LandingPage } from "./components/LandingPage";
 import { PlayerPage } from "./components/PlayerPage";
@@ -25,22 +26,29 @@ function App() {
     }, []);
 
     return (
-        <div className="app-container">
-            {view === "home" && <LandingPage setView={setView} />}
-            {view === "upload" && <UploadPage setView={setView} URL={URL} />}
-            {view === "player" && (
-                <PlayerPage
-                    setView={setView}
-                    selectedFile={selectedFile}
-                    setSelectedFile={setSelectedFile}
-                    files={files}
-                    URL={URL}
-                />
-            )}
-            {view === "download" && (
-                <DownloadPage setView={setView} files={files} URL={URL} />
-            )}
-        </div>
+        <Router>
+            <div className="app-container">
+                <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/upload" element={<UploadPage URL={URL} />} />
+                    <Route
+                        path="/player"
+                        element={
+                            <PlayerPage
+                                selectedFile={selectedFile}
+                                setSelectedFile={setSelectedFile}
+                                files={files}
+                                URL={URL}
+                            />
+                        }
+                    />
+                    <Route
+                        path="/download"
+                        element={<DownloadPage files={files} URL={URL} />}
+                    />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 
