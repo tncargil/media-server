@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { FileSearch } from "../hooks/FileFilter";
 
 export const PlayerPage = ({
     setView,
@@ -8,13 +9,22 @@ export const PlayerPage = ({
     URL,
 }) => {
     const navigate = useNavigate();
+    const { searchTerm, setSearchTerm, filteredFiles } = FileSearch(files);
+
     return (
         <div>
             <button className="home-button" onClick={() => navigate("/")}>
-                ← home
+                ←
             </button>
 
             <div>
+                <input
+                    className="search-bar"
+                    type="text"
+                    placeholder="Search files..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
                 <div
                     style={{
                         width: "100%",
@@ -55,7 +65,7 @@ export const PlayerPage = ({
                         Folder Files
                     </h2>
                     <ul style={{ listStyle: "none", padding: 0 }}>
-                        {files
+                        {filteredFiles
                             .filter((file) =>
                                 /\.(mp4|mov|webm|ogv|mkv)$/i.test(file),
                             )
